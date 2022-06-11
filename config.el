@@ -95,7 +95,6 @@
 
         (setq org-hide-emphasis-markers t)
         (setq org-directory '("~/Notes/"))
-        ;; (setq org-agenda-files '("~/Notes/"))
         (setq org-agenda-files (directory-files-recursively "~/Notes/" "\\.org$"))
 
         (require 'org-bullets)
@@ -117,4 +116,8 @@
                 :hook (org-mode . org-fancy-priorities-mode)
                 :config
                 (setq org-fancy-priorities-list '("HIGH" "MEDIUM" "LOW" "☕")))
+
+        ;; latex
+        (require 'latex-preview-pane)
+        (latex-preview-pane-enable)
  )
