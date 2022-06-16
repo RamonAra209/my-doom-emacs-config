@@ -75,11 +75,39 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-;; Packages and stuff
+;; EVIL
+(require 'evil-snipe)
+(setq evil-snipe-scope 'visible)
+(use-package evil-goggles
+        :config
+        (setq evil-goggles-duration 0.150)
+        (setq evil-goggles-enable-change t)
+        (setq evil-goggles-enable-delete t)
+        (evil-goggles-use-diff-faces)
+)
+
 (setq projectile-project-search-path '("~/Developer/" "~/Developer/Personal-Projects/"))
 
+(after! tramp
+    (setq tramp-inline-compress-start-size 1000)
+    (setq tramp-copy-size-limit 10000)
+    (setq vc-handled-backends '(Git))
+    (setq tramp-verbose 10)
+    (setq tramp-default-method "scp")
+    (setq tramp-use-ssh-controlmaster-options nil)
+    (setq projectile--mode-line "Projectile")
+    (setq tramp-verbose 10))
 
-(require 'evil-snipe)
+;; LSP-UI
+(use-package lsp-ui
+  :config
+  (setq lsp-ui-sideline-show-hover t)
+  (setq lsp-ui-doc-show-with-mouse t))
+
+;; (setq doom-modeline-github t ;; Github notifications
+;;       ;; need to set interval here: https://github.com/magit/ghub
+;;       ;; requires ghub package
+;;       )
 
 (after! org
         (map! :map org-mode-map
@@ -100,16 +128,16 @@
         (require 'org-bullets)
         (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
         (use-package! org-super-agenda
-        :after org-agenda
-        :init
-        (setq org-super-agenda-groups '((:name "Today" :time-grid t :scheduled today)
-                                        (:name "Due today" :deadline today)
-                                        (:name "Important" :priority "A")
-                                        (:name "Overdue" :deadline past)
-                                        (:name "Due soon" :deadline future)
-                                        (:name "Big Outcomes" :tag "bo")))
-        :config
-        (org-super-agenda-mode)
+                :after org-agenda
+                :init
+                (setq org-super-agenda-groups '((:name "Today" :time-grid t :scheduled today)
+                                                (:name "Due today" :deadline today)
+                                                (:name "Important" :priority "A")
+                                                (:name "Overdue" :deadline past)
+                                                (:name "Due soon" :deadline future)
+                                                (:name "Big Outcomes" :tag "bo")))
+                :config
+                (org-super-agenda-mode)
         )
 
         (use-package! org-fancy-priorities
@@ -121,3 +149,7 @@
         (require 'latex-preview-pane)
         (latex-preview-pane-enable)
  )
+
+(map! :after vterm
+      :map vterm-mode-map
+      :ni "C-c" #'vterm-send-C-c)
