@@ -52,3 +52,5 @@
 (package! org-fancy-priorities)
 (package! org-super-agenda)
 (package! tldr)
+(package! evil-goggles)
+(package! lsp-ui)
