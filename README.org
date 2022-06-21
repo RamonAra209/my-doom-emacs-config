@@ -1,0 +1,83 @@
+#+TITLE: test
+#+STARTUP: show2levels
+#+PROPERTY: header-args :tangle new_config.el
+#+auto_tangle: t
+
+* Table of Contents :TOC_3:noexport:
+- [[#visual][Visual]]
+  - [[#theme][Theme]]
+  - [[#line-numbers][Line Numbers]]
+- [[#evil-mode][Evil Mode]]
+  - [[#evil-snipe][Evil Snipe]]
+  - [[#evil-goggles][Evil Goggles]]
+- [[#lsp-ui][LSP-UI]]
+- [[#org-mode][Org Mode]]
+  - [[#opening-tag-for-org-mode][Opening tag for org mode]]
+  - [[#org-directories][Org Directories]]
+    - [[#main-org-directory][Main org directory]]
+    - [[#searching-for-agendas][Searching for agendas]]
+  - [[#org-priority-faces][Org-Priority-Faces]]
+  - [[#closing-tag-for-org-mode][Closing tag for org mode]]
+
+* Visual
+** Theme
+#+begin_src emacs-lisp
+(setq doom-theme 'doom-old-hope)
+#+end_src
+** Line Numbers
+#+begin_src emacs-lisp
+(setq display-line-numbers-type-t)
+#+end_src
+* Evil Mode
+** Evil Snipe
+#+begin_src emacs-lisp
+(require 'evil-snipe)
+#+end_src
+** Evil Goggles
+#+begin_src emacs-lisp
+(use-package evil-goggles
+        :config
+        (setq evil-goggles-duration 0.150)
+        (setq evil-goggles-enable-change t)
+        (setq evil-goggles-enable-delete t)
+        (evil-goggles-use-diff-faces)
+)
+#+end_src
+* LSP-UI
+#+begin_src emacs-lisp
+(setq lsp-ui-sideline-show-hover t)
+(setq lsp-ui-doc-show-with-mouse t)
+#+end_src
+* Org Mode
+** Opening tag for org mode
+*KEEP AT TOP OF ORG MODE SECTION*
+#+begin_src emacs-lisp
+(after! org ;; opening segment of org mode section
+#+end_src
+
+** Org Directories
+*** Main org directory
+Declaring the default org directory
+#+begin_src emacs-lisp
+(setq org-directory '("~/Notes/"))
+#+end_src
+*** Searching for agendas
+Recursively searches listed directories for files that are org files, and adds them to agenda view if they have TODOs
+#+begin_src emacs-lisp
+(setq org-agenda-files (directory-files-recursively "~/Notes/" "\\.org$"))
+#+end_src
+
+** Org-Priority-Faces
+Sets the color of TODO priorities (i.e. LOW, MEDIUM, HIGH)
+#+begin_src emacs-lisp
+(setq org-agenda-skip-scheduled-if-done t
+        org-priority-faces '((65 :foreground "#FF0000")
+                        (66 :foreground "#0098dd")
+                        (67 :foreground "#da8548")))
+#+end_src
+
+** Closing tag for org mode
+*KEEP AT BOTTOM OF ORG MODE SECTION*
+#+begin_src emacs-lisp
+) ;; closing parentheses for org mode section
+#+end_src
