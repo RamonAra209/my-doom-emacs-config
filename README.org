@@ -12,17 +12,19 @@
   - [[#evil-goggles][Evil Goggles]]
 - [[#lsp-ui][LSP-UI]]
 - [[#org-mode][Org Mode]]
-  - [[#opening-tag-for-org-mode][Opening tag for org mode]]
+  - [[#opening-tag-for-org-mode-keep-at-top][Opening tag for org mode (keep at top)]]
+  - [[#company-mode-disable][Company mode disable]]
   - [[#key-bindings][Key bindings]]
   - [[#org-directories][Org Directories]]
   - [[#org-bullets][Org Bullets]]
   - [[#org-priority-faces][Org-Priority-Faces]]
   - [[#latex][Latex]]
   - [[#auto-tangle][Auto-Tangle]]
-  - [[#org-tempo][Org-Tempo]]
-  - [[#closing-tag-for-org-mode][Closing tag for org mode]]
+  - [[#org-tempo-org-structure-templates][Org-Tempo (org structure templates)]]
+  - [[#closing-tag-for-org-mode-keep-at-bottom][Closing tag for org mode (keep at bottom)]]
 - [[#programming-languages][Programming Languages]]
   - [[#python][Python]]
+    - [[#virtual-environment-management][Virtual environment management]]
 - [[#projectile][Projectile]]
 - [[#tramp][Tramp]]
 - [[#global-keybindings][Global Keybindings]]
@@ -57,35 +59,32 @@
 (setq lsp-ui-doc-show-with-mouse t)
 #+end_src
 * Org Mode
-** Opening tag for org mode
-*KEEP AT TOP OF ORG MODE SECTION*
+#+begin_src emacs-lisp
+(setq org-directory '("~/Notes/")) ;; main org directory
+#+end_src
+** Opening tag for org mode (keep at top)
 #+begin_src emacs-lisp
 (after! org ;; opening segment of org mode section
 #+end_src
+** Company mode disable
 ** Key bindings
-Moving indent blocks with vim keybindings
 #+begin_src emacs-lisp
-(map! :map org-mode-map
+(map! :map org-mode-map ;; Moving indent blocks with vim keybindings
         :n "M-j" #'org-metadown
         :n "M-k" #'org-metaup)
 #+end_src
-
 ** Org Directories
 #+begin_src emacs-lisp
-(setq org-directory '("~/Notes/")) ;; main org directory
 (setq org-agenda-files (directory-files-recursively "~/Notes/" "\\.org$")) ;; dirs to search for TODOs
 #+end_src
 ** Org Bullets
-The must have to replace those disgusting default bullets with nice looking ones
 #+begin_src emacs-lisp
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 #+end_src
-
 ** Org-Priority-Faces
-Sets the color of TODO priorities (i.e. LOW, MEDIUM, HIGH)
 #+begin_src emacs-lisp
-(setq org-agenda-skip-scheduled-if-done t
+(setq org-agenda-skip-scheduled-if-done t ;; for setting todo priority colors
         org-priority-faces '((65 :foreground "#FF0000")
                         (66 :foreground "#0098dd")
                         (67 :foreground "#da8548")))
@@ -96,7 +95,6 @@ Sets the color of TODO priorities (i.e. LOW, MEDIUM, HIGH)
 (latex-preview-pane-enable)
 #+end_src
 ** Auto-Tangle
-A must have for when I'm too lazy to convert code blocks to actual files
 #+begin_src emacs-lisp
 (use-package! org-auto-tangle
     :defer t
@@ -104,20 +102,19 @@ A must have for when I'm too lazy to convert code blocks to actual files
     :config
     (setq org-auto-tangle-default t))
 #+end_src
-** Org-Tempo
-Snippets for code blocks with predefined flags. Add ':export both' to export source code and results to pdf
+** Org-Tempo (org structure templates)
 #+begin_src emacs-lisp
 (require 'org-tempo)
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python :results output"))
 #+end_src
-** Closing tag for org mode
-*KEEP AT BOTTOM OF ORG MODE SECTION*
+** Closing tag for org mode (keep at bottom)
 #+begin_src emacs-lisp
 ) ;; closing parentheses for org mode section
 #+end_src
 * Programming Languages
 ** Python
+*** Virtual environment management
 #+begin_src emacs-lisp
 (use-package pyvenv
   :diminish
@@ -131,9 +128,8 @@ Snippets for code blocks with predefined flags. Add ':export both' to export sou
 (setq projectile-project-search-path '("~/Developer/" "~/Developer/Personal-Projects/")) ;; add downloads here
 #+end_src
 * Tramp
-I never have to use vim on my Raspberry Pi ever again
 #+begin_src emacs-lisp
-(after! tramp
+(after! tramp ;; never using vim on my Pi ever again
     (setq tramp-inline-compress-start-size 1000)
     (setq tramp-copy-size-limit 10000)
     (setq vc-handled-backends '(Git))
@@ -144,9 +140,10 @@ I never have to use vim on my Raspberry Pi ever again
     (setq tramp-verbose 10))
 #+end_src
 * Global Keybindings
-Who thought that not having Ctrl-c quit a terminal process by default was a good idea?
 #+begin_src emacs-lisp
-(map! :after vterm
+(map! :after vterm ;; allows ctrl-c to kill process in vterm
       :map vterm-mode-map
       :ni "C-c" #'vterm-send-C-c)
 #+end_src
+
+
