@@ -53,4 +53,6 @@
 (package! org-super-agenda)
 (package! tldr)
 (package! evil-goggles)
-(package! lsp-ui)
+;; (package! lsp-ui)
+(package! pyvenv)
+(package! org-auto-tangle)

@@ -99,10 +99,12 @@
     (setq tramp-verbose 10))
 
 ;; LSP-UI
-(use-package lsp-ui
-  :config
-  (setq lsp-ui-sideline-show-hover t)
-  (setq lsp-ui-doc-show-with-mouse t))
+;; (use-package lsp-ui
+;;   :config
+;;   (setq lsp-ui-sideline-show-hover t)
+;;   (setq lsp-ui-doc-show-with-mouse t))
+(setq lsp-ui-sideline-show-hover t)
+(setq lsp-ui-doc-show-with-mouse t)
 
 ;; (setq doom-modeline-github t ;; Github notifications
 ;;       ;; need to set interval here: https://github.com/magit/ghub
@@ -110,6 +112,11 @@
 ;;       )
 
 (after! org
+        ;; (add-hook 'org-mode-hook (lambda () (company-mode -1)))
+        ;; (if (org-in-src-block-p) (lambda () (company-mode 1)))
+        ;; (add-hook 'org-in-src-block-p (lambda () (company-mode 1)))
+        ;; (add-hook 'prog-mode-hook (lambda () (company-mode 1)))
+
         (map! :map org-mode-map
                 :n "M-j" #'org-metadown
                 :n "M-k" #'org-metaup)
@@ -148,8 +155,26 @@
         ;; latex
         (require 'latex-preview-pane)
         (latex-preview-pane-enable)
+
+        ;; Auto Tangle
+        (use-package! org-auto-tangle
+          :defer t
+          :hook (org-mode . org-auto-tangle-mode)
+          :config
+          (setq org-auto-tangle-default t))
+
+        (require 'org-tempo)
+        (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+        (add-to-list 'org-structure-template-alist '("py" . "src python :results output"))
  )
 
 (map! :after vterm
       :map vterm-mode-map
       :ni "C-c" #'vterm-send-C-c)
+
+(use-package pyvenv
+  :diminish
+  :config
+  (setq pyvenv-mode-line-indicator
+        '(pyvenv-virtual-env-name ("[venv:" pyvenv-virtual-env-name "] ")))
+  (pyvenv-mode +1))
