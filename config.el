@@ -1,50 +1,9 @@
-#+TITLE: test
-#+STARTUP: show2levels
-#+PROPERTY: header-args :tangle config.el
-#+auto_tangle: t
-
-* Table of Contents :TOC_3:noexport:
-- [[#visual][Visual]]
-  - [[#theme][Theme]]
-  - [[#line-numbers][Line Numbers]]
-- [[#evil-mode][Evil Mode]]
-  - [[#evil-snipe][Evil Snipe]]
-  - [[#evil-goggles][Evil Goggles]]
-- [[#lsp-ui][LSP-UI]]
-- [[#org-mode][Org Mode]]
-  - [[#opening-tag-for-org-mode-keep-at-top][Opening tag for org mode (keep at top)]]
-  - [[#company-mode-disable][Company mode disable]]
-  - [[#key-bindings][Key bindings]]
-  - [[#org-directories][Org Directories]]
-  - [[#org-bullets][Org Bullets]]
-  - [[#org-priority-faces][Org-Priority-Faces]]
-  - [[#latex][Latex]]
-  - [[#auto-tangle][Auto-Tangle]]
-  - [[#org-tempo-org-structure-templates][Org-Tempo (org structure templates)]]
-  - [[#closing-tag-for-org-mode-keep-at-bottom][Closing tag for org mode (keep at bottom)]]
-- [[#programming-languages][Programming Languages]]
-  - [[#python][Python]]
-    - [[#virtual-environment-management][Virtual environment management]]
-- [[#projectile][Projectile]]
-- [[#tramp][Tramp]]
-- [[#global-keybindings][Global Keybindings]]
-
-* Visual
-** Theme
-#+begin_src emacs-lisp
 (setq doom-theme 'doom-old-hope)
-#+end_src
-** Line Numbers
-#+begin_src emacs-lisp
+
 (setq display-line-numbers-type t)
-#+end_src
-* Evil Mode
-** Evil Snipe
-#+begin_src emacs-lisp
+
 (require 'evil-snipe)
-#+end_src
-** Evil Goggles
-#+begin_src emacs-lisp
+
 (use-package evil-goggles
         :config
         (setq evil-goggles-duration 0.150)
@@ -52,83 +11,52 @@
         (setq evil-goggles-enable-delete t)
         (evil-goggles-use-diff-faces)
 )
-#+end_src
-* LSP-UI
-#+begin_src emacs-lisp
+
 (setq lsp-ui-sideline-show-hover t)
 (setq lsp-ui-doc-show-with-mouse t)
-#+end_src
-* Org Mode
-#+begin_src emacs-lisp
+
 (setq org-directory '("~/Notes/")) ;; main org directory
-#+end_src
-** Opening tag for org mode (keep at top)
-#+begin_src emacs-lisp
+
 (after! org ;; opening segment of org mode section
-#+end_src
-** Company mode disable
-** Key bindings
-#+begin_src emacs-lisp
+
 (map! :map org-mode-map ;; Moving indent blocks with vim keybindings
         :n "M-j" #'org-metadown
         :n "M-k" #'org-metaup)
-#+end_src
-** Org Directories
-#+begin_src emacs-lisp
+
 (setq org-agenda-files (directory-files-recursively "~/Notes/" "\\.org$")) ;; dirs to search for TODOs
-#+end_src
-** Org Bullets
-#+begin_src emacs-lisp
+
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-#+end_src
-** Org-Priority-Faces
-#+begin_src emacs-lisp
+
 (setq org-agenda-skip-scheduled-if-done t ;; for setting todo priority colors
         org-priority-faces '((65 :foreground "#FF0000")
                         (66 :foreground "#0098dd")
                         (67 :foreground "#da8548")))
-#+end_src
-** Latex
-#+begin_src emacs-lisp
+
 (require 'latex-preview-pane)
 (latex-preview-pane-enable)
-#+end_src
-** Auto-Tangle
-#+begin_src emacs-lisp
+
 (use-package! org-auto-tangle
     :defer t
     :hook (org-mode . org-auto-tangle-mode)
     :config
     (setq org-auto-tangle-default t))
-#+end_src
-** Org-Tempo (org structure templates)
-#+begin_src emacs-lisp
+
 (require 'org-tempo)
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python :results output"))
-#+end_src
-** Closing tag for org mode (keep at bottom)
-#+begin_src emacs-lisp
+
 ) ;; closing parentheses for org mode section
-#+end_src
-* Programming Languages
-** Python
-*** Virtual environment management
-#+begin_src emacs-lisp
+
 (use-package pyvenv
   :diminish
   :config
   (setq pyvenv-mode-line-indicator
         '(pyvenv-virtual-env-name ("[venv:" pyvenv-virtual-env-name "] ")))
   (pyvenv-mode +1))
-#+end_src
-* Projectile
-#+begin_src emacs-lisp
+
 (setq projectile-project-search-path '("~/Developer/" "~/Developer/Personal-Projects/")) ;; add downloads here
-#+end_src
-* Tramp
-#+begin_src emacs-lisp
+
 (after! tramp ;; never using vim on my Pi ever again
     (setq tramp-inline-compress-start-size 1000)
     (setq tramp-copy-size-limit 10000)
@@ -138,12 +66,7 @@
     (setq tramp-use-ssh-controlmaster-options nil)
     (setq projectile--mode-line "Projectile")
     (setq tramp-verbose 10))
-#+end_src
-* Global Keybindings
-#+begin_src emacs-lisp
+
 (map! :after vterm ;; allows ctrl-c to kill process in vterm
       :map vterm-mode-map
       :ni "C-c" #'vterm-send-C-c)
-#+end_src
-
-
