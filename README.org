@@ -22,12 +22,14 @@
   - [[#auto-tangle][Auto-Tangle]]
   - [[#org-tempo-org-structure-templates][Org-Tempo (org structure templates)]]
   - [[#closing-tag-for-org-mode-keep-at-bottom][Closing tag for org mode (keep at bottom)]]
-- [[#programming-languages][Programming Languages]]
+- [[#programming-languages--snippets][Programming Languages + Snippets]]
   - [[#python][Python]]
     - [[#virtual-environment-management][Virtual environment management]]
+  - [[#snippets][Snippets]]
 - [[#projectile][Projectile]]
 - [[#tramp][Tramp]]
 - [[#global-keybindings][Global Keybindings]]
+- [[#random-variables][Random variables]]
 
 * Visual
 ** Theme
@@ -36,7 +38,9 @@
 #+end_src
 ** Line Numbers
 #+begin_src emacs-lisp
-(setq display-line-numbers-type t)
+(custom-theme-set-faces! 'doom-old-hope
+    (set-face-foreground 'line-number "#708090")
+    (set-face-foreground 'line-number-current-line "#ef7c2b"))
 #+end_src
 * Evil Mode
 ** Evil Snipe
@@ -112,7 +116,7 @@
 #+begin_src emacs-lisp
 ) ;; closing parentheses for org mode section
 #+end_src
-* Programming Languages
+* Programming Languages + Snippets
 ** Python
 *** Virtual environment management
 #+begin_src emacs-lisp
@@ -122,6 +126,11 @@
   (setq pyvenv-mode-line-indicator
         '(pyvenv-virtual-env-name ("[venv:" pyvenv-virtual-env-name "] ")))
   (pyvenv-mode +1))
+#+end_src
+** Snippets
+#+begin_src emacs-lisp
+(yas-global-mode 1)
+(add-hook 'yas-minor-mode-hook (lambda () (yas-activate-extra-mode 'fundamental-mode)))
 #+end_src
 * Projectile
 #+begin_src emacs-lisp
@@ -144,6 +153,13 @@
 (map! :after vterm ;; allows ctrl-c to kill process in vterm
       :map vterm-mode-map
       :ni "C-c" #'vterm-send-C-c)
+
+(map! :leader ;; sets default behavior so that spc-w-v follows new window'
+      :desc "Split current window vertically, then focus on new window"
+      "w v" #'+evil/window-vsplit-and-follow)
 #+end_src
 
-
+* Random variables
+#+begin_src emacs-lisp
+(setq company-idle-delay 0.2)
+#+end_src

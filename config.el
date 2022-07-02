@@ -1,6 +1,8 @@
 (setq doom-theme 'doom-old-hope)
 
-(setq display-line-numbers-type t)
+(custom-theme-set-faces! 'doom-old-hope
+    (set-face-foreground 'line-number "#708090")
+    (set-face-foreground 'line-number-current-line "#ef7c2b"))
 
 (require 'evil-snipe)
 
@@ -55,6 +57,9 @@
         '(pyvenv-virtual-env-name ("[venv:" pyvenv-virtual-env-name "] ")))
   (pyvenv-mode +1))
 
+(yas-global-mode 1)
+(add-hook 'yas-minor-mode-hook (lambda () (yas-activate-extra-mode 'fundamental-mode)))
+
 (setq projectile-project-search-path '("~/Developer/" "~/Developer/Personal-Projects/")) ;; add downloads here
 
 (after! tramp ;; never using vim on my Pi ever again
@@ -70,3 +75,9 @@
 (map! :after vterm ;; allows ctrl-c to kill process in vterm
       :map vterm-mode-map
       :ni "C-c" #'vterm-send-C-c)
+
+(map! :leader ;; sets default behavior so that spc-w-v follows new window'
+      :desc "Split current window vertically, then focus on new window"
+      "w v" #'+evil/window-vsplit-and-follow)
+
+(setq company-idle-delay 0.2)
