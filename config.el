@@ -48,6 +48,16 @@
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python :results output"))
 
+(require 'org-download)
+(add-hook 'dired-mode-hook 'org-download-enable)
+(use-package org-download
+  :ensure t
+  :defer t
+  :init
+  ;; Add handlers for drag-and-drop when Org is loaded.
+    (with-eval-after-load 'org
+      (org-download-enable)))
+
 ) ;; closing parentheses for org mode section
 
 (use-package pyvenv

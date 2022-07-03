@@ -151,7 +151,7 @@
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
        (org
-        +dragndrop
+        ;; +dragndrop
         +pretty
         +pomodoro
         +pandoc

@@ -21,6 +21,7 @@
   - [[#latex][Latex]]
   - [[#auto-tangle][Auto-Tangle]]
   - [[#org-tempo-org-structure-templates][Org-Tempo (org structure templates)]]
+  - [[#org-download][Org-Download]]
   - [[#closing-tag-for-org-mode-keep-at-bottom][Closing tag for org mode (keep at bottom)]]
 - [[#programming-languages--snippets][Programming Languages + Snippets]]
   - [[#python][Python]]
@@ -111,6 +112,18 @@
 (require 'org-tempo)
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python :results output"))
+#+end_src
+** Org-Download
+#+begin_src emacs-lisp
+(require 'org-download)
+(add-hook 'dired-mode-hook 'org-download-enable)
+(use-package org-download
+  :ensure t
+  :defer t
+  :init
+  ;; Add handlers for drag-and-drop when Org is loaded.
+    (with-eval-after-load 'org
+      (org-download-enable)))
 #+end_src
 ** Closing tag for org mode (keep at bottom)
 #+begin_src emacs-lisp
