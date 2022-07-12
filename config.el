@@ -2,7 +2,9 @@
 
 (custom-theme-set-faces! 'doom-old-hope
     (set-face-foreground 'line-number "#708090")
-    (set-face-foreground 'line-number-current-line "#ef7c2b"))
+    (set-face-foreground 'line-number-current-line "#ef7c2b")) ;; orange
+
+(beacon-mode 1) ;; never lose that cursor ever again
 
 (require 'evil-snipe)
 
@@ -29,6 +31,10 @@
 
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+(use-package! org-fancy-priorities
+                :hook (org-mode . org-fancy-priorities-mode)
+                :config
+                (setq org-fancy-priorities-list '("HIGH" "MEDIUM" "LOW" "☕")))
 
 (setq org-agenda-skip-scheduled-if-done t ;; for setting todo priority colors
         org-priority-faces '((65 :foreground "#FF0000")
@@ -89,5 +95,9 @@
 (map! :leader ;; sets default behavior so that spc-w-v follows new window'
       :desc "Split current window vertically, then focus on new window"
       "w v" #'+evil/window-vsplit-and-follow)
+
+;; (map! :leader ;;
+;;       :desc "Split current window vertically"
+;;       "w V" #'+evil/window-vsplit)
 
 (setq company-idle-delay 0.2)

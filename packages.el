@@ -56,3 +56,4 @@
 ;; (package! lsp-ui)
 (package! pyvenv)
 (package! org-auto-tangle)
+(package! beacon)
