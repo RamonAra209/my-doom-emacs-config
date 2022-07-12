@@ -157,15 +157,7 @@
 #+end_src
 * Tramp
 #+begin_src emacs-lisp
-(after! tramp ;; never using vim on my Pi ever again
-    (setq tramp-inline-compress-start-size 1000)
-    (setq tramp-copy-size-limit 10000)
-    (setq vc-handled-backends '(Git))
-    (setq tramp-verbose 10)
-    (setq tramp-default-method "scp")
-    (setq tramp-use-ssh-controlmaster-options nil)
-    (setq projectile--mode-line "Projectile")
-    (setq tramp-verbose 10))
+;; (add-to-list 'eglot-server-programs '(python-mode . ("pyright")))
 #+end_src
 * Global Keybindings
 #+begin_src emacs-lisp
