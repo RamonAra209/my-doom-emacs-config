@@ -6,70 +6,6 @@
 
 (beacon-mode 1) ;; never lose that cursor ever again
 
-;; ;; This is *NECESSARY* for Doom users who enabled `dired' module
-;; (map! :map dired-mode-map :ng "q" #'quit-window)
-
-;; (use-package dirvish
-;;   :init
-;;   (dirvish-override-dired-mode)
-;;   :custom
-;;   ;; Go back home? Just press `bh'
-;;   (dirvish-bookmark-entries
-;;    '(("h" "~/"                          "Home")
-;;      ("d" "~/Downloads/"                "Downloads")
-;;      ("m" "/mnt/"                       "Drives")
-;;      ("t" "~/.local/share/Trash/files/" "TrashCan")))
-;;   ;; (dirvish-header-line-format '(:left (path) :right (free-space)))
-;;   (dirvish-mode-line-format ; it's ok to place string inside
-;;    '(:left (sort file-time " " file-size symlink) :right (omit yank index)))
-;;   ;; Don't worry, Dirvish is still performant even you enable all these attributes
-;;   (dirvish-attributes '(all-the-icons file-size collapse subtree-state vc-state git-msg))
-;;   ;; Maybe the icons are too big to your eyes
-;;   ;; (dirvish-all-the-icons-height 0.8)
-;;   ;; In case you want the details at startup like `dired'
-;;   (dirvish-hide-details nil)
-;;   :config
-;;   (dirvish-peek-mode) ;; Opens a minibuffer on the right side that lets you see contents of file
-;;   ;; Dired options are respected except a few exceptions, see *In relation to Dired* section above
-;;   (setq dired-dwim-target t)
-;;   (setq delete-by-moving-to-trash t)
-;;   ;; Enable mouse drag-and-drop files to other applications
-;;   (setq dired-mouse-drag-files t)                   ; added in Emacs 29
-;;   (setq mouse-drag-and-drop-region-cross-program t) ; added in Emacs 29
-;;   ;; Make sure to use the long name of flags when exists
-;;   ;; eg. use "--almost-all" instead of "-A"
-;;   ;; Otherwise some commands won't work properly
-;;   (setq dired-listing-switches
-;;         "-l --almost-all --human-readable --time-style=long-iso --group-directories-first --no-group")
-;;   :bind
-;;   ;; Bind `dirvish|dirvish-side|dirvish-dwim' as you see fit
-;;   (
-;;    ("C-c f" . dirvish-dwim)
-;;    :map dired-mode-map ; Dirvish respects all the keybindings in this map
-;;    ("h" . dired-up-directory)
-;;    ;; ("j" . dired-next-line)
-;;    ;; ("k" . dired-previous-line)
-;;    ("l" . dired-find-file)
-;;    ;; ("i" . wdired-change-to-wdired-mode)
-;;    ;; ("." . dired-omit-mode)
-;;    ("b"   . dirvish-dwim-bookmark-jump)
-;;    ("f"   . dirvish-dwim-file-info-menu)
-;;    ("y"   . dirvish-dwim-yank-menu)
-;;    ("N"   . dirvish-dwim-narrow)
-;;    ("^"   . dirvish-dwim-history-last)
-;;    ("s"   . dirvish-dwim-quicksort) ; remapped `dired-sort-toggle-or-edit'
-;;    ("?"   . dirvish-dwim-dispatch)  ; remapped `dired-summary'
-;;    ("TAB" . dirvish-dwim-subtree-toggle)
-;;    ("SPC" . dirvish-dwim-history-jump)
-;;    ("M-n" . dirvish-dwim-history-go-forward)
-;;    ("M-p" . dirvish-dwim-history-go-backward)
-;;    ("M-l" . dirvish-dwim-ls-switches-menu)
-;;    ("M-m" . dirvish-dwim-mark-menu)
-;;    ("M-f" . dirvish-dwim-toggle-fullscreen)
-;;    ("M-s" . dirvish-dwim-setup-menu)
-;;    ("M-e" . dirvish-dwim-emerge-menu)
-;;    ("M-j" . dirvish-dwim-fd-jump)))
-
 (require 'evil-snipe)
 
 (use-package evil-goggles
@@ -151,5 +87,20 @@
 
 (evilem-default-keybindings "SPC")
 (map! :leader :desc "evilmotion find" "f j" #'avy-goto-char-timer)
+
+(after! company ;; enabling tab complete how it should be
+  (dolist (key '("<return>" "RET"))
+    (define-key company-active-map (kbd key)
+      `(menu-item nil company-complete
+                  :filter ,(lambda (cmd)
+                             (when (company-explicit-action-p)
+                              cmd)))))
+  ;; (define-key company-active-map (kbd "TAB") #'company-complete-selection)
+  (map! :map company-active-map "TAB" #'company-complete-selection)
+  (map! :map company-active-map "<tab>" #'company-complete-selection)
+  (define-key company-active-map (kbd "SPC") nil)
+
+  (setq company-auto-commit-chars nil)
+  )
 
 (setq company-idle-delay 0.05)

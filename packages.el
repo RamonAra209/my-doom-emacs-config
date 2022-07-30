@@ -51,11 +51,10 @@
 
 (package! org-fancy-priorities)
 (package! org-super-agenda)
-(package! tldr)
 (package! evil-goggles)
 (package! pyvenv)
 (package! org-auto-tangle)
 (package! beacon)
 (package! org-bullets)
-;; (package! dirvish)
+;; (unpin! dirvish)
 (package! numpydoc)

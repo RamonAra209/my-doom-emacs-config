@@ -7,23 +7,20 @@
 - [[#visual][Visual]]
   - [[#theme][Theme]]
   - [[#line-numbers][Line Numbers]]
-  - [[#dirvish-dired][Dirvish (dired)]]
 - [[#evil-mode][Evil Mode]]
   - [[#evil-snipe][Evil Snipe]]
   - [[#evil-goggles][Evil Goggles]]
 - [[#lsp-ui][LSP-UI]]
 - [[#org-mode][Org Mode]]
   - [[#opening-tag-for-org-mode-keep-at-top][Opening tag for org mode (keep at top)]]
-  - [[#company-mode-disable][Company mode disable]]
   - [[#key-bindings][Key bindings]]
   - [[#org-directories][Org Directories]]
-  - [[#org-bullets--priorities][Org Bullets + Priorities]]
-  - [[#org-priority-faces][Org-Priority-Faces]]
+  - [[#fancy-org][Fancy Org]]
   - [[#latex][Latex]]
   - [[#auto-tangle][Auto-Tangle]]
   - [[#org-tempo-org-structure-templates][Org-Tempo (org structure templates)]]
   - [[#closing-tag-for-org-mode-keep-at-bottom][Closing tag for org mode (keep at bottom)]]
-- [[#programming-languages--snippets][Programming Languages + Snippets]]
+- [[#programming-languages--snippets--mode-maps][Programming Languages + Snippets + mode maps]]
   - [[#python][Python]]
   - [[#snippets][Snippets]]
 - [[#projectile][Projectile]]
@@ -43,72 +40,6 @@
     (set-face-foreground 'line-number-current-line "#ef7c2b")) ;; orange
 
 (beacon-mode 1) ;; never lose that cursor ever again
-#+end_src
-** Dirvish (dired)
-#+begin_src emacs-lisp
-;; ;; This is *NECESSARY* for Doom users who enabled `dired' module
-;; (map! :map dired-mode-map :ng "q" #'quit-window)
-
-;; (use-package dirvish
-;;   :init
-;;   (dirvish-override-dired-mode)
-;;   :custom
-;;   ;; Go back home? Just press `bh'
-;;   (dirvish-bookmark-entries
-;;    '(("h" "~/"                          "Home")
-;;      ("d" "~/Downloads/"                "Downloads")
-;;      ("m" "/mnt/"                       "Drives")
-;;      ("t" "~/.local/share/Trash/files/" "TrashCan")))
-;;   ;; (dirvish-header-line-format '(:left (path) :right (free-space)))
-;;   (dirvish-mode-line-format ; it's ok to place string inside
-;;    '(:left (sort file-time " " file-size symlink) :right (omit yank index)))
-;;   ;; Don't worry, Dirvish is still performant even you enable all these attributes
-;;   (dirvish-attributes '(all-the-icons file-size collapse subtree-state vc-state git-msg))
-;;   ;; Maybe the icons are too big to your eyes
-;;   ;; (dirvish-all-the-icons-height 0.8)
-;;   ;; In case you want the details at startup like `dired'
-;;   (dirvish-hide-details nil)
-;;   :config
-;;   (dirvish-peek-mode) ;; Opens a minibuffer on the right side that lets you see contents of file
-;;   ;; Dired options are respected except a few exceptions, see *In relation to Dired* section above
-;;   (setq dired-dwim-target t)
-;;   (setq delete-by-moving-to-trash t)
-;;   ;; Enable mouse drag-and-drop files to other applications
-;;   (setq dired-mouse-drag-files t)                   ; added in Emacs 29
-;;   (setq mouse-drag-and-drop-region-cross-program t) ; added in Emacs 29
-;;   ;; Make sure to use the long name of flags when exists
-;;   ;; eg. use "--almost-all" instead of "-A"
-;;   ;; Otherwise some commands won't work properly
-;;   (setq dired-listing-switches
-;;         "-l --almost-all --human-readable --time-style=long-iso --group-directories-first --no-group")
-;;   :bind
-;;   ;; Bind `dirvish|dirvish-side|dirvish-dwim' as you see fit
-;;   (
-;;    ("C-c f" . dirvish-dwim)
-;;    :map dired-mode-map ; Dirvish respects all the keybindings in this map
-;;    ("h" . dired-up-directory)
-;;    ;; ("j" . dired-next-line)
-;;    ;; ("k" . dired-previous-line)
-;;    ("l" . dired-find-file)
-;;    ;; ("i" . wdired-change-to-wdired-mode)
-;;    ;; ("." . dired-omit-mode)
-;;    ("b"   . dirvish-dwim-bookmark-jump)
-;;    ("f"   . dirvish-dwim-file-info-menu)
-;;    ("y"   . dirvish-dwim-yank-menu)
-;;    ("N"   . dirvish-dwim-narrow)
-;;    ("^"   . dirvish-dwim-history-last)
-;;    ("s"   . dirvish-dwim-quicksort) ; remapped `dired-sort-toggle-or-edit'
-;;    ("?"   . dirvish-dwim-dispatch)  ; remapped `dired-summary'
-;;    ("TAB" . dirvish-dwim-subtree-toggle)
-;;    ("SPC" . dirvish-dwim-history-jump)
-;;    ("M-n" . dirvish-dwim-history-go-forward)
-;;    ("M-p" . dirvish-dwim-history-go-backward)
-;;    ("M-l" . dirvish-dwim-ls-switches-menu)
-;;    ("M-m" . dirvish-dwim-mark-menu)
-;;    ("M-f" . dirvish-dwim-toggle-fullscreen)
-;;    ("M-s" . dirvish-dwim-setup-menu)
-;;    ("M-e" . dirvish-dwim-emerge-menu)
-;;    ("M-j" . dirvish-dwim-fd-jump)))
 #+end_src
 * Evil Mode
 ** Evil Snipe
@@ -140,7 +71,6 @@
 #+begin_src emacs-lisp
 (after! org ;; opening segment of org mode section
 #+end_src
-** Company mode disable
 ** Key bindings
 #+begin_src emacs-lisp
 (map! :map org-mode-map ;; Moving indent blocks with vim keybindings
@@ -151,7 +81,7 @@
 #+begin_src emacs-lisp
 (setq org-agenda-files (directory-files-recursively "~/Notes/" "\\.org$")) ;; dirs to search for TODOs
 #+end_src
-** Org Bullets + Priorities
+** Fancy Org
 #+begin_src emacs-lisp
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
@@ -159,9 +89,7 @@
                 :hook (org-mode . org-fancy-priorities-mode)
                 :config
                 (setq org-fancy-priorities-list '("HIGH" "MEDIUM" "LOW" "☕")))
-#+end_src
-** Org-Priority-Faces
-#+begin_src emacs-lisp
+
 (setq org-agenda-skip-scheduled-if-done t ;; for setting todo priority colors
         org-priority-faces '((65 :foreground "#FF0000")
                         (66 :foreground "#0098dd")
@@ -190,7 +118,7 @@
 #+begin_src emacs-lisp
 ) ;; closing parentheses for org mode section
 #+end_src
-* Programming Languages + Snippets
+* Programming Languages + Snippets + mode maps
 ** Python
 #+begin_src emacs-lisp
 (use-package pyvenv
@@ -230,6 +158,21 @@
 
 (evilem-default-keybindings "SPC")
 (map! :leader :desc "evilmotion find" "f j" #'avy-goto-char-timer)
+
+(after! company ;; enabling tab complete how it should be
+  (dolist (key '("<return>" "RET"))
+    (define-key company-active-map (kbd key)
+      `(menu-item nil company-complete
+                  :filter ,(lambda (cmd)
+                             (when (company-explicit-action-p)
+                              cmd)))))
+  ;; (define-key company-active-map (kbd "TAB") #'company-complete-selection)
+  (map! :map company-active-map "TAB" #'company-complete-selection)
+  (map! :map company-active-map "<tab>" #'company-complete-selection)
+  (define-key company-active-map (kbd "SPC") nil)
+
+  (setq company-auto-commit-chars nil)
+  )
 #+end_src
 
 * Random variables
