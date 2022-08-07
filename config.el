@@ -8,7 +8,7 @@
 
 (require 'evil-snipe)
 
-(use-package evil-goggles
+(use-package! evil-goggles
         :config
         (setq evil-goggles-duration 0.150)
         (setq evil-goggles-enable-change t)
@@ -16,7 +16,7 @@
         (evil-goggles-use-diff-faces)
 )
 
-(setq lsp-ui-sideline-enable t)
+(setq lsp-ui-sideline-enable nil)
 (setq lsp-ui-sideline-show-hover t)
 (setq lsp-ui-doc-show-with-mouse t)
 (setq lsp-ui-doc-enable t)
@@ -29,22 +29,69 @@
         :n "M-j" #'org-metadown
         :n "M-k" #'org-metaup)
 
-(setq org-agenda-files (directory-files-recursively "~/Notes/" "\\.org$")) ;; dirs to search for TODOs
+(setq org-agenda-files (apply 'append
+        (mapcar
+            (lambda (directory)
+                (directory-files-recursively
+                directory org-agenda-file-regexp))
+        '("~/Notes/" "~/Developer/" "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org"))))
 
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 (use-package! org-fancy-priorities
                 :hook (org-mode . org-fancy-priorities-mode)
                 :config
-                (setq org-fancy-priorities-list '("HIGH" "MEDIUM" "LOW" "☕")))
+                (setq org-fancy-priorities-list '("HIGH" "MEDIUM" "LOW" "☕"))
+                    org-todo-keywords '((sequence "HW")))
 
 (setq org-agenda-skip-scheduled-if-done t ;; for setting todo priority colors
         org-priority-faces '((65 :foreground "#FF0000")
                         (66 :foreground "#0098dd")
                         (67 :foreground "#da8548")))
 
+(setq org-capture-templates
+      '(
+        ("t" "General Todo" entry (file+headline "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/gtd.org" "Tasks")
+         "* TODO %?\n  %i\n  %a")
+        ("j" "Journal" entry (file+datetree "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/journal.org")
+         "* %?\nEntered on %U\n  %i\n  %a")
+        ("w" "Work Todo Entries")
+            ("we" "No Time" entry (file "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/work.org")
+             "** %^{Type|HW|READ|TODO|PROJ} %^{Todo title} %?" :prepend t :empty-lines-before 0
+             :refile-targets (("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/work.org" :maxlevel . 2)))
+
+            ("ws" "Scheduled" entry (file "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/work.org")
+             "** %^{Type|HW|READ|TODO|PROJ} %^{Todo title}\nSCHEDULED: %^t%?" :prepend t :empty-lines-before 0
+             :refile-targets (("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/work.org" :maxlevel . 2)))
+
+            ("wd" "Deadline" entry (file "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/work.org")
+             "** %^{Type|HW|READ|TODO|PROJ} %^{Todo title}\nDEADLINE: %^t%?" :prepend t :empty-lines-before 0
+             :refile-targets (("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/work.org" :maxlevel . 2)))
+
+            ("ww" "Scheduled & deadline" entry (file "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/work.org")
+             "** %^{Type|HW|READ|TODO|PROJ} %^{Todo title}\nSCHEDULED: %^t DEADLINE: %^t %?" :prepend t :empty-lines-before 0
+             :refile-targets (("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/work.org" :maxlevel . 2)))
+            )
+)
+
+;; (setq ((org-super-agenda-groups
+;;         '(
+;;             (:name "Today" :time-grid t :scheduled today)
+;;             (:name "Due today" :deadline today)
+;;             (:name "Important" :priority "A")
+;;             (:name "Overdue" :deadline past)
+;;             (:name "Due soon" :deadline future)
+;;             (:name "All other priorites" :priority<= "B" :order 1)
+;;           )
+;;         ))
+;;     (org-agenda nil "a")
+;; )
+
 (require 'latex-preview-pane)
 (latex-preview-pane-enable)
+
+(load-library "ox-reveal")
+(setq org-reveal-root "/Users/tahpramen/reveal.js-master")
 
 (use-package! org-auto-tangle
     :defer t
@@ -58,14 +105,14 @@
 
 ) ;; closing parentheses for org mode section
 
-(use-package pyvenv
+(use-package! pyvenv
   :diminish
   :config
   (setq pyvenv-mode-line-indicator
         '(pyvenv-virtual-env-name ("[venv:" pyvenv-virtual-env-name "] ")))
   (pyvenv-mode +1))
 
-(use-package numpydoc
+(use-package! numpydoc
   :ensure t
   :bind (:map python-mode-map
               ("C-c C-n" . numpydoc-generate)))

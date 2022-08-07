@@ -58,3 +58,5 @@
 (package! org-bullets)
 ;; (unpin! dirvish)
 (package! numpydoc)
+(package! org-reveal)
+(package! ox-reveal)
