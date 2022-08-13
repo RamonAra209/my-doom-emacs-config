@@ -66,7 +66,7 @@
 #+end_src
 * Org Mode
 #+begin_src emacs-lisp
-(setq org-directory '("~/Notes/")) ;; main org directory
+(setq org-directory '("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org")) ;; main org directory
 #+end_src
 ** Opening tag for org mode (keep at top)
 #+begin_src emacs-lisp
@@ -85,7 +85,7 @@
             (lambda (directory)
                 (directory-files-recursively
                 directory org-agenda-file-regexp))
-        '("~/Notes/" "~/Developer/" "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org"))))
+        '("~/Developer/" "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org"))))
 #+end_src
 ** Fancy Org
 #+begin_src emacs-lisp

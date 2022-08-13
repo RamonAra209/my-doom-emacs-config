@@ -21,7 +21,7 @@
 (setq lsp-ui-doc-show-with-mouse t)
 (setq lsp-ui-doc-enable t)
 
-(setq org-directory '("~/Notes/")) ;; main org directory
+(setq org-directory '("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org")) ;; main org directory
 
 (after! org ;; opening segment of org mode section
 
@@ -34,7 +34,7 @@
             (lambda (directory)
                 (directory-files-recursively
                 directory org-agenda-file-regexp))
-        '("~/Notes/" "~/Developer/" "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org"))))
+        '("~/Developer/" "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org"))))
 
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))

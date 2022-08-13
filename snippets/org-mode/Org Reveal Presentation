@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: Org Reveal Presentation
+# key: <orp
+# --
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+#+REVEAL_THEME: blood
+
+#+TITLE: ${1:Title}
+#+SUBTITLE: ${2:Optional Subtitle}
+#+AUTHOR: Ramon Arambula
+
+#+options: H:2 toc:nil timestamp:nil num:nil
+#+export_file_name: presentation.html
