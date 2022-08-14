@@ -1,5 +1,6 @@
 (setq doom-theme 'doom-old-hope)
 
+(setq display-line-numbers-type 'relative)
 (custom-theme-set-faces! 'doom-old-hope
     (set-face-foreground 'line-number "#708090")
     (set-face-foreground 'line-number-current-line "#ef7c2b")) ;; orange
@@ -16,6 +17,8 @@
         (evil-goggles-use-diff-faces)
 )
 
+;; Link for file watchers github: https://github.com/doomemacs/doomemacs/issues/5557
+(setq lsp-enable-file-watchers nil) ;; temporary solution, causes rust modules to import on startup
 (setq lsp-ui-sideline-enable nil)
 (setq lsp-ui-sideline-show-hover t)
 (setq lsp-ui-doc-show-with-mouse t)
@@ -116,6 +119,13 @@
   :ensure t
   :bind (:map python-mode-map
               ("C-c C-n" . numpydoc-generate)))
+
+(remove-hook! rust-mode-hook #'racer-mode #'eldoc-mode)
+(remove-hook! rustic-mode-hook #'racer-mode #'eldoc-mode)
+(remove-hook! rustic-mode-local-vars-hook #'racer-mode)
+(remove-hook! hack-local-variables-hook #'racer-mode)
+(after! lsp-rust
+  (setq lsp-rust-server 'rust-analyzer))
 
 (yas-global-mode 1)
 (add-hook 'yas-minor-mode-hook (lambda () (yas-activate-extra-mode 'fundamental-mode)))

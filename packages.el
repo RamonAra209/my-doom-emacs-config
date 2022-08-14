@@ -60,3 +60,4 @@
 (package! numpydoc)
 (package! org-reveal)
 (package! ox-reveal)
+(package! racer :disable t)
