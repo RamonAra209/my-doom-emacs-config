@@ -7,8 +7,14 @@
 
 (beacon-mode 1) ;; never lose that cursor ever again
 
-(require 'evil-snipe)
+(setq auto-revert-check-vc-info t) ;; refreshes branch info automatically
+(setq doom-modeline-buffer-encoding nil
+    doom-modeline-enable-word-count nil
+    doom-modeline-major-mode-icon t
+    doom-modeline-major-mode-color-icon t
+)
 
+(require 'evil-snipe)
 (use-package! evil-goggles
         :config
         (setq evil-goggles-duration 0.150)
@@ -18,19 +24,15 @@
 )
 
 ;; Link for file watchers github: https://github.com/doomemacs/doomemacs/issues/5557
-(setq lsp-enable-file-watchers nil) ;; temporary solution, causes rust modules to import on startup
-(setq lsp-ui-sideline-enable nil)
-(setq lsp-ui-sideline-show-hover t)
-(setq lsp-ui-doc-show-with-mouse t)
-(setq lsp-ui-doc-enable t)
+;; (setq lsp-enable-file-watchers nil) ;; temporary solution, causes rust modules to import on startup
+;; (setq lsp-ui-sideline-enable nil)
+;; (setq lsp-ui-sideline-show-hover t)
+;; (setq lsp-ui-doc-show-with-mouse t)
+;; (setq lsp-ui-doc-enable t)
 
 (setq org-directory '("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org")) ;; main org directory
 
 (after! org ;; opening segment of org mode section
-
-(map! :map org-mode-map ;; Moving indent blocks with vim keybindings
-        :n "M-j" #'org-metadown
-        :n "M-k" #'org-metaup)
 
 (setq org-agenda-files (apply 'append
         (mapcar
@@ -41,10 +43,17 @@
 
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+(setq org-ellipsis "  ⬎ ")
+(setq org-startup-folded 'show2levels)
+(setq org-hide-emphasis-markers t)
+(setq org-list-demote-modify-bullet
+      '(("+" . "*") ("*" . "-") ("-" . "+")))
+
 (use-package! org-fancy-priorities
                 :hook (org-mode . org-fancy-priorities-mode)
                 :config
-                (setq org-fancy-priorities-list '("HIGH" "MEDIUM" "LOW" "☕"))
+                (setq org-fancy-priorities-list '("HIGH" "MEDIUM" "LOW"))
                     org-todo-keywords '((sequence "HW")))
 
 (setq org-agenda-skip-scheduled-if-done t ;; for setting todo priority colors
@@ -106,6 +115,10 @@
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python :results output"))
 
+(map! :map org-mode-map ;; Moving indent blocks with vim keybindings
+        :n "M-j" #'org-metadown
+        :n "M-k" #'org-metaup)
+
 ) ;; closing parentheses for org mode section
 
 (use-package! pyvenv
@@ -151,6 +164,11 @@
 (setq projectile-project-search-path '("~/Developer/" "~/Developer/Personal-Projects/")) ;; add downloads here
 
 ;; (add-to-list 'eglot-server-programs '(python-mode . ("pyright")))
+;; (lsp-register-client
+;;     (make-lsp-client :new-connection (lsp-tramp-connection "pyright")
+;;                      :major-modes '(python-mode)
+;;                      :remote? t
+;;                      :server-id pyright-remote))
 
 (map! :after vterm ;; allows ctrl-c to kill process in vterm
       :map vterm-mode-map
@@ -176,6 +194,6 @@
   (define-key company-active-map (kbd "SPC") nil)
 
   (setq company-auto-commit-chars nil)
-  )
+)
 
 (setq company-idle-delay 0.05)

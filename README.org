@@ -7,23 +7,24 @@
 - [[#visual][Visual]]
   - [[#theme][Theme]]
   - [[#line-numbers][Line Numbers]]
+  - [[#modeline][Modeline]]
 - [[#evil-mode][Evil Mode]]
-  - [[#evil-snipe][Evil Snipe]]
-  - [[#evil-goggles][Evil Goggles]]
 - [[#lsp-ui][LSP-UI]]
 - [[#org-mode][Org Mode]]
   - [[#opening-tag-for-org-mode-keep-at-top][Opening tag for org mode (keep at top)]]
-  - [[#key-bindings][Key bindings]]
   - [[#org-directories][Org Directories]]
-  - [[#fancy-org][Fancy Org]]
+  - [[#visuals][Visuals]]
+  - [[#agenda-tracking][Agenda Tracking]]
   - [[#latex][Latex]]
   - [[#org-reveal-fancy-presentations][Org Reveal (fancy presentations)]]
   - [[#auto-tangle][Auto-Tangle]]
   - [[#org-tempo-org-structure-templates][Org-Tempo (org structure templates)]]
+  - [[#key-bindings][Key Bindings]]
   - [[#closing-tag-for-org-mode-keep-at-bottom][Closing tag for org mode (keep at bottom)]]
 - [[#programming-languages--snippets--mode-maps][Programming Languages + Snippets + mode maps]]
   - [[#python][Python]]
   - [[#rust][Rust]]
+  - [[#web-stuff][Web Stuff]]
   - [[#snippets][Snippets]]
 - [[#projectile][Projectile]]
 - [[#tramp][Tramp]]
@@ -44,13 +45,18 @@
 
 (beacon-mode 1) ;; never lose that cursor ever again
 #+end_src
+** Modeline
+#+begin_src emacs-lisp
+(setq auto-revert-check-vc-info t) ;; refreshes branch info automatically
+(setq doom-modeline-buffer-encoding nil
+    doom-modeline-enable-word-count nil
+    doom-modeline-major-mode-icon t
+    doom-modeline-major-mode-color-icon t
+)
+#+end_src
 * Evil Mode
-** Evil Snipe
 #+begin_src emacs-lisp
 (require 'evil-snipe)
-#+end_src
-** Evil Goggles
-#+begin_src emacs-lisp
 (use-package! evil-goggles
         :config
         (setq evil-goggles-duration 0.150)
@@ -62,11 +68,11 @@
 * LSP-UI
 #+begin_src emacs-lisp
 ;; Link for file watchers github: https://github.com/doomemacs/doomemacs/issues/5557
-(setq lsp-enable-file-watchers nil) ;; temporary solution, causes rust modules to import on startup
-(setq lsp-ui-sideline-enable nil)
-(setq lsp-ui-sideline-show-hover t)
-(setq lsp-ui-doc-show-with-mouse t)
-(setq lsp-ui-doc-enable t)
+;; (setq lsp-enable-file-watchers nil) ;; temporary solution, causes rust modules to import on startup
+;; (setq lsp-ui-sideline-enable nil)
+;; (setq lsp-ui-sideline-show-hover t)
+;; (setq lsp-ui-doc-show-with-mouse t)
+;; (setq lsp-ui-doc-enable t)
 #+end_src
 * Org Mode
 #+begin_src emacs-lisp
@@ -75,12 +81,6 @@
 ** Opening tag for org mode (keep at top)
 #+begin_src emacs-lisp
 (after! org ;; opening segment of org mode section
-#+end_src
-** Key bindings
-#+begin_src emacs-lisp
-(map! :map org-mode-map ;; Moving indent blocks with vim keybindings
-        :n "M-j" #'org-metadown
-        :n "M-k" #'org-metaup)
 #+end_src
 ** Org Directories
 #+begin_src emacs-lisp
@@ -91,14 +91,23 @@
                 directory org-agenda-file-regexp))
         '("~/Developer/" "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org"))))
 #+end_src
-** Fancy Org
+** Visuals
 #+begin_src emacs-lisp
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+(setq org-ellipsis "  ⬎ ")
+(setq org-startup-folded 'show2levels)
+(setq org-hide-emphasis-markers t)
+(setq org-list-demote-modify-bullet
+      '(("+" . "*") ("*" . "-") ("-" . "+")))
+#+end_src
+** Agenda Tracking
+#+begin_src emacs-lisp
 (use-package! org-fancy-priorities
                 :hook (org-mode . org-fancy-priorities-mode)
                 :config
-                (setq org-fancy-priorities-list '("HIGH" "MEDIUM" "LOW" "☕"))
+                (setq org-fancy-priorities-list '("HIGH" "MEDIUM" "LOW"))
                     org-todo-keywords '((sequence "HW")))
 
 (setq org-agenda-skip-scheduled-if-done t ;; for setting todo priority colors
@@ -168,6 +177,12 @@
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python :results output"))
 #+end_src
+** Key Bindings
+#+begin_src emacs-lisp
+(map! :map org-mode-map ;; Moving indent blocks with vim keybindings
+        :n "M-j" #'org-metadown
+        :n "M-k" #'org-metaup)
+#+end_src
 ** Closing tag for org mode (keep at bottom)
 #+begin_src emacs-lisp
 ) ;; closing parentheses for org mode section
@@ -228,6 +243,11 @@
 * Tramp
 #+begin_src emacs-lisp
 ;; (add-to-list 'eglot-server-programs '(python-mode . ("pyright")))
+;; (lsp-register-client
+;;     (make-lsp-client :new-connection (lsp-tramp-connection "pyright")
+;;                      :major-modes '(python-mode)
+;;                      :remote? t
+;;                      :server-id pyright-remote))
 #+end_src
 * Global Keybindings
 #+begin_src emacs-lisp
@@ -255,7 +275,7 @@
   (define-key company-active-map (kbd "SPC") nil)
 
   (setq company-auto-commit-chars nil)
-  )
+)
 #+end_src
 
 * Random variables
