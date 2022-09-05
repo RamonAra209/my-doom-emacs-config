@@ -61,3 +61,8 @@
 (package! org-reveal)
 (package! ox-reveal)
 (package! racer :disable t)
+
+
+(package! ein)
+(package! smart-tab)
+(package! impatient-mode)

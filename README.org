@@ -196,6 +196,26 @@
 (after! lsp-rust
   (setq lsp-rust-server 'rust-analyzer))
 #+end_src
+** Web Stuff
+#+begin_src emacs-lisp
+(require 'impatient-mode)
+
+(require 'smart-tab)
+(global-smart-tab-mode 1)
+
+(defun add-emmet-expand-to-smart-tab-completions ()
+  ;; Add an entry for current major mode in
+  ;; `smart-tab-completion-functions-alist' to use
+  ;; `emmet-expand-line'.
+  (add-to-list 'smart-tab-completion-functions-alist
+               (cons major-mode #'emmet-expand-line)))
+
+(require 'emmet-mode)
+(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+(add-hook 'sgml-mode-hook 'add-emmet-expand-to-smart-tab-completions)
+(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+(add-hook 'css-mode-hook 'add-emmet-expand-to-smart-tab-completions)
+#+end_src
 ** Snippets
 #+begin_src emacs-lisp
 (yas-global-mode 1)
