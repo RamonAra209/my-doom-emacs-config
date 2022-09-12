@@ -115,6 +115,10 @@
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python :results output"))
 
+(defun org-babel-edit-prep:python (babel-info)
+  (setq-local buffer-file-name (->> babel-info caddr (alist-get :tangle)))
+  (lsp))
+
 (map! :map org-mode-map ;; Moving indent blocks with vim keybindings
         :n "M-j" #'org-metadown
         :n "M-k" #'org-metaup)
