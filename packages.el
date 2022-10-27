@@ -56,13 +56,13 @@
 (package! org-auto-tangle)
 (package! beacon)
 (package! org-bullets)
-;; (unpin! dirvish)
 (package! numpydoc)
 (package! org-reveal)
 (package! ox-reveal)
 (package! racer :disable t)
+(package! deadgrep)
 
-
-(package! ein)
 (package! smart-tab)
 (package! impatient-mode)
+
+(package! ef-themes)

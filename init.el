@@ -21,7 +21,7 @@
 
        :completion
        (company)           ; the ultimate code completion backend FIXME I took off +childrame
-       ;;helm              ; the *other* search engine for love and life
+       ;; (helm +fuzzy)              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
        vertico           ; the search engine of the future
@@ -66,7 +66,7 @@
        ;;word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
-       dired             ; making dired pretty [functional]
+       (dired)             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
        ;; ibuffer         ; interactive buffer management
        undo              ; persistent, smarter undo for your inevitable mistakes
@@ -85,16 +85,16 @@
 
        :tools
        ;;ansible
-       ;;biblio            ; Writes a PhD for you (citation needed)
+       ;; biblio            ; Writes a PhD for you (citation needed)
        debugger          ; FIXME stepping through code, to help you add bugs
        ;;direnv
-       ;;docker
+       docker
        ;;editorconfig      ; let someone else argue about tabs vs spaces
-       ;;ein               ; tame Jupyter notebooks with emacs
+       ;; ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
-       (lsp)               ; M-x vscode FIXME(Deleted +lsp +eglot)
+       (lsp +eglot)               ; M-x vscode FIXME(Deleted +lsp +eglot)
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
@@ -134,11 +134,11 @@
        ;;fstar             ; (dependent) types and (monadic) effects and Z3
        ;;gdscript          ; the language you waited for
        ;;(go +lsp)         ; the hipster dialect
-       ;; (haskell +lsp)    ; a language that's lazier than I am
+       (haskell +lsp)    ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ; a language you can depend on
        json              ; At least it ain't XML
-       ;;(java +lsp)       ; the poster child for carpal tunnel syndrome
+       ;; (java +lsp)       ; the poster child for carpal tunnel syndrome
        ;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
@@ -156,7 +156,7 @@
         +pomodoro
         +pandoc
         )               ; organize your plain life in plain text
-       ;;php               ; perl's insecure younger brother
+       (php +lsp)               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
        (python +lsp +pyright)          ; beautiful is better than ugly
@@ -169,13 +169,13 @@
        (rust +lsp)              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
        ;;(scheme +guile)   ; a fully conniving family of lisps
-       ;; sh                ; she sells {ba,z,fi}sh shells on the C xor
+       (sh +lsp)               ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
        web               ; the tubes
-       ;; yaml              ; JSON, but readable
+       (yaml +lsp)              ; JSON, but readable
        ;;zig               ; C, but simpler
 
        :email

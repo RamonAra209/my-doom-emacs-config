@@ -1,6 +1,9 @@
 (setq doom-theme 'doom-old-hope)
 
-(setq display-line-numbers-type 'relative)
+(setq display-line-numbers-type 'visual) ;; was relative
+(setq line-move-visual t)
+(setq evil-respect-visual-line-mode t)
+
 (custom-theme-set-faces! 'doom-old-hope
     (set-face-foreground 'line-number "#708090")
     (set-face-foreground 'line-number-current-line "#ef7c2b")) ;; orange
@@ -13,6 +16,45 @@
     doom-modeline-major-mode-icon t
     doom-modeline-major-mode-color-icon t
 )
+
+;; (use-package dirvish
+;;   :init
+;;   (dirvish-override-dired-mode)
+;;   ;; :custom
+;;   ;; (dirvish-quick-access-entries ; It's a :custom option
+;;   ;;  '(("h" "~/"                          "Home")
+;;   ;;    ("d" "~/Downloads/"                "Downloads")
+;;   ;;    ("m" "/mnt/"                       "Drives")
+;;   ;;    ("t" "~/.local/share/Trash/files/" "TrashCan")))
+;;   :config
+;;   ;; (dirvish-peek-mode) ; Preview files in minibuffer
+;;   (setq dirvish-mode-line-format
+;;         '(:left (sort file-time " " file-size symlink) :right (omit yank index)))
+;;   (setq dirvish-attributes
+;;         '(all-the-icons file-size collapse subtree-state vc-state git-msg))
+;;   (setq delete-by-moving-to-trash t)
+;;   (setq dired-listing-switches
+;;         "-l --almost-all --human-readable --time-style=long-iso --group-directories-first --no-group")
+;;   :bind ; Bind `dirvish|dirvish-side|dirvish-dwim' as you see fit
+;;   (("C-c f" . dirvish-fd)
+;;    :map dirvish-mode-map ; Dirvish inherits `dired-mode-map'
+;;    ("a"   . dirvish-dwim-quick-access)
+;;    ("f"   . dirvish-dwim-file-info-menu)
+;;    ("y"   . dirvish-dwim-yank-menu)
+;;    ("N"   . dirvish-dwim-narrow)
+;;    ("^"   . dirvish-dwim-history-last)
+;;    ("h"   . dirvish-dwim-history-jump) ; remapped `describe-mode'
+;;    ("s"   . dirvish-dwim-quicksort)    ; remapped `dired-sort-toggle-or-edit'
+;;    ("v"   . dirvish-dwim-vc-menu)      ; remapped `dired-view-file'
+;;    ("TAB" . dirvish-dwim-subtree-toggle)
+;;    ("M-f" . dirvish-dwim-history-go-forward)
+;;    ("M-b" . dirvish-dwim-history-go-backward)
+;;    ("M-l" . dirvish-dwim-ls-switches-menu)
+;;    ("M-m" . dirvish-dwim-mark-menu)
+;;    ("M-t" . dirvish-dwim-layout-toggle)
+;;    ("M-s" . dirvish-dwim-setup-menu)
+;;    ("M-e" . dirvish-dwim-emerge-menu)
+;;    ("M-j" . dirvish-dwim-fd-jump)))
 
 (require 'evil-snipe)
 (use-package! evil-goggles
@@ -63,8 +105,24 @@
 
 (setq org-capture-templates
       '(
-        ("t" "General Todo" entry (file+headline "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/gtd.org" "Tasks")
-         "* TODO %?\n  %i\n  %a")
+        ;; ("t" "General Todo" entry (file+headline "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/gtd.org" "Tasks")
+        ;;  "* TODO %?\n  %i\n  %a")
+        ("t" "General Todo")
+            ("te" "No Time" entry (file "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/gtd.org")
+             "** %^{Type|HW|READ|TODO|PROJ} %^{Todo title} %?" :prepend t :empty-lines-before 0
+             :refile-targets (("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/gtd.org" :maxlevel . 2)))
+
+            ("ts" "Scheduled" entry (file "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/gtd.org")
+             "** %^{Type|HW|READ|TODO|PROJ} %^{Todo title}\nSCHEDULED: %^t%?" :prepend t :empty-lines-before 0
+             :refile-targets (("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/gtd.org" :maxlevel . 2)))
+
+            ("td" "Deadline" entry (file "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/gtd.org")
+             "** %^{Type|HW|READ|TODO|PROJ} %^{Todo title}\nDEADLINE: %^t%?" :prepend t :empty-lines-before 0
+             :refile-targets (("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/gtd.org" :maxlevel . 2)))
+
+            ("tw" "Scheduled & deadline" entry (file "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/gtd.org")
+             "** %^{Type|HW|READ|TODO|PROJ} %^{Todo title}\nSCHEDULED: %^t DEADLINE: %^t %?" :prepend t :empty-lines-before 0
+             :refile-targets (("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/gtd.org" :maxlevel . 2)))
         ("j" "Journal" entry (file+datetree "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/journal.org")
          "* %?\nEntered on %U\n  %i\n  %a")
         ("w" "Work Todo Entries")
@@ -86,18 +144,10 @@
             )
 )
 
-;; (setq ((org-super-agenda-groups
-;;         '(
-;;             (:name "Today" :time-grid t :scheduled today)
-;;             (:name "Due today" :deadline today)
-;;             (:name "Important" :priority "A")
-;;             (:name "Overdue" :deadline past)
-;;             (:name "Due soon" :deadline future)
-;;             (:name "All other priorites" :priority<= "B" :order 1)
-;;           )
-;;         ))
-;;     (org-agenda nil "a")
-;; )
+(setq org-todo-keywords
+      (quote ((sequence "TODO(t)" "DOING(g)" "|" "DONE(d)"))))
+
+(setq org-todo-keywords-for-agenda '("TODO" "PROJ" "LOOP" "STRT" "WAIT" "HOLD" "IDEA" "DOING" "DONE" "KILL" "[ ]" "[-]" "[?]" "[X]" "OKAY" "YES" "NO"))
 
 (require 'latex-preview-pane)
 (latex-preview-pane-enable)
@@ -116,7 +166,9 @@
 (add-to-list 'org-structure-template-alist '("py" . "src python :results output"))
 
 (defun org-babel-edit-prep:python (babel-info)
-  (setq-local buffer-file-name (->> babel-info caddr (alist-get :tangle)))
+  ;; to add more language support, see:
+  ;; https://github.com/emacs-lsp/lsp-mode/issues/2842#issuecomment-870807018
+(setq-local buffer-file-name (->> babel-info caddr (alist-get :tangle)))
   (lsp))
 
 (map! :map org-mode-map ;; Moving indent blocks with vim keybindings
@@ -137,12 +189,14 @@
   :bind (:map python-mode-map
               ("C-c C-n" . numpydoc-generate)))
 
-(remove-hook! rust-mode-hook #'racer-mode #'eldoc-mode)
-(remove-hook! rustic-mode-hook #'racer-mode #'eldoc-mode)
-(remove-hook! rustic-mode-local-vars-hook #'racer-mode)
-(remove-hook! hack-local-variables-hook #'racer-mode)
+;; (remove-hook! rust-mode-hook #'racer-mode #'eldoc-mode)
+;; (remove-hook! rustic-mode-hook #'racer-mode #'eldoc-mode)
+;; (remove-hook! rustic-mode-local-vars-hook #'racer-mode)
+;; (remove-hook! hack-local-variables-hook #'racer-mode)
+
 (after! lsp-rust
-  (setq lsp-rust-server 'rust-analyzer))
+  (setq lsp-rust-server 'rust-analyzer)
+)
 
 (require 'impatient-mode)
 
@@ -201,3 +255,6 @@
 )
 
 (setq company-idle-delay 0.05)
+(setq pdf-view-display-size 'fit-height)
+(setq global-eldoc-mode -1)
+(setq global-display-line-numbers-mode-buffers +1)
